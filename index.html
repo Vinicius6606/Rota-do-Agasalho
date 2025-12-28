@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rota do Agasalho — Caraguatatuba/SP</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <div>
+        <h1 class="title">Rota do Agasalho</h1>
+        <p class="subtitle">Encontre pontos de doação em Caraguatatuba/SP (implantação no <b>Spani Atacadista</b>).</p>
+      </div>
+
+      <a class="btn btn--ghost" href="#como-doar">Como doar</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero__card">
+        <h2>Doe com facilidade</h2>
+        <p>
+          Use a busca e os filtros para encontrar um ponto perto de você.
+          Se tiver um novo ponto, envie pela seção “Sugerir ponto”.
+        </p>
+        <div class="hero__cta">
+          <a class="btn" href="#pontos">Ver pontos</a>
+          <a class="btn btn--secondary" href="#sugerir">Sugerir ponto</a>
+        </div>
+      </div>
+
+      <div class="hero__card hero__card--info">
+        <h3>Implantação</h3>
+        <p>
+          Este site pode ser divulgado via <b>QR Code</b> no <b>Spani Atacadista</b>
+          e em outros parceiros da cidade.
+        </p>
+        <div class="qr">
+          <div class="qr__fake" aria-hidden="true"><img src="qPAyCr.png" alt="QRcode divulgação" width="70px"></div>
+          <small>Coloque aqui o QR Code do link do site.</small>
+        </div>
+      </div>
+    </section>
+
+    
+
+    <section id="como-doar" class="section">
+      <div class="section__head">
+        <h2>Como doar</h2>
+        <p class="muted">Dicas rápidas para sua doação ajudar de verdade.</p>
+      </div>
+
+      <div class="tips">
+        <div class="tip">
+          <h3>Separe e higienize</h3>
+          <p>Doe roupas limpas e em bom estado. Se possível, separe por tamanho (infantil/adulto).</p>
+        </div>
+        <div class="tip">
+          <h3>Priorize o essencial</h3>
+          <p>Agasalhos, cobertores, meias e calçados em bom estado fazem muita diferença.</p>
+        </div>
+        <div class="tip">
+          <h3>Respeite os horários</h3>
+          <p>Confira o horário do ponto antes de sair — isso evita deslocamento perdido.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="sugerir" class="section">
+      <div class="section__head">
+        <h2>Sugerir ponto</h2>
+        <p class="muted">Envie um novo ponto ou correção.</p>
+      </div>
+
+      <form id="suggestForm" class="form">
+        <div class="form__row">
+          <label class="field">
+            <span>Nome do local</span>
+            <input required name="nome" placeholder="Ex.: Escola X / Igreja Y / Mercado Z" />
+          </label>
+          <label class="field">
+            <span>Bairro</span>
+            <input required name="bairro" placeholder="Ex.: Centro" />
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Endereço</span>
+          <input required name="endereco" placeholder="Rua, número, referência" />
+        </label>
+
+        <div class="form__row">
+          <label class="field">
+            <span>Horário</span>
+            <input name="horario" placeholder="Ex.: Seg–Sex 9h–18h" />
+          </label>
+          <label class="field">
+            <span>Contato (opcional)</span>
+            <input name="contato" placeholder="Telefone / e-mail / Instagram" />
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Itens aceitos (separe por vírgula)</span>
+          <input name="itens" placeholder="Ex.: agasalhos, cobertores, meias" />
+        </label>
+
+        <label class="field">
+          <span>Observações (opcional)</span>
+          <textarea name="obs" rows="3" placeholder="Ex.: deixe na portaria / caixa de doação"></textarea>
+        </label>
+
+        <button class="btn" type="submit">Enviar sugestão</button>
+        <p id="formMsg" class="muted"></p>
+      </form>
+    </section>
+
+    <footer class="footer">
+      <p class="muted">
+        Projeto extensionista — Rota do Agasalho • Caraguatatuba/SP • Desenvolvido em HTML/CSS/JS.
+      </p>
+    </footer>
+  </main>
+
+  <!-- Modal -->
+  <dialog id="modal" class="modal">
+    <div class="modal__content">
+      <div class="modal__head">
+        <h3 id="modalTitle">Detalhes</h3>
+        <button id="closeModal" class="icon-btn" aria-label="Fechar">✕</button>
+      </div>
+
+      <div class="modal__body">
+        <p><b>Bairro:</b> <span id="modalBairro"></span></p>
+        <p><b>Endereço:</b> <span id="modalEndereco"></span></p>
+        <p><b>Horário:</b> <span id="modalHorario"></span></p>
+        <p><b>Contato:</b> <span id="modalContato"></span></p>
+        <p><b>Itens aceitos:</b> <span id="modalItens"></span></p>
+        <p><b>Observações:</b> <span id="modalObs"></span></p>
+
+        <div class="modal__actions">
+          <a id="mapsLink" class="btn btn--secondary" target="_blank" rel="noopener">Abrir no mapa</a>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+    <script>
+    const SUPABASE_URL = "https://ikjldhanrtmhkdahcxrh.supabase.co"
+    const SUPABASE_ANON_KEY = "sb_publishable_haRaODv-sduOJn-hss-P1Q_jWGeibkE"
+
+    const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    )
+
+    console.log("Cliente Supabase:", supabaseClient)
+    </script>
+
+    <script src="app.js"></script>
+</body>
+</html>
